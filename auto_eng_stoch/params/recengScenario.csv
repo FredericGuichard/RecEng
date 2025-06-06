@@ -1,0 +1,5 @@
+Iadj,lmdaAdj,resL,resS,jac,varName,xVal,serVal,indx
+0,1,42,2,1,eta,0.01,1,2
+0,1,0,0,1,eg,3.9,0.1,1
+0,1,0,0,1,0,0,0,0
+0,1,0,0,1,0,0,0,0
