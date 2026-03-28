@@ -30,12 +30,18 @@ matplotlib.pyplot.ion()
 from numpy.linalg import multi_dot
 
 
+new_wd="/Users/papa/OneDrive - McGill University/Documents/Projects/RecEng/recengRealclass"
+os.chdir(new_wd)
+
+subfolder='auto_eng_stoch'
+os.chdir(subfolder)
+
 # In[44]:
 
 
-##############################################
-##### Query Data File ####################
-##############################################
+# ##############################################
+# ##### Query Data File ####################
+# ##############################################
 
 def query(newFilter=pd.DataFrame(),valGrp=['eg_0','eta_0'],prfile='plot_par.csv',varfile='plot_var.csv'):
 
@@ -44,7 +50,9 @@ def query(newFilter=pd.DataFrame(),valGrp=['eg_0','eta_0'],prfile='plot_par.csv'
     vl=genfromtxt(''.join([path_data,varfile]),delimiter=',',dtype=str)
     
     valN=newFilter.columns.values
-    for i in range(size(newFilter)): pr[valN[i]][0]=newFilter[valN[i]][0]
+    #for i in range(size(newFilter)): pr[valN[i]][0]=newFilter[valN[i]][0]
+    #for i in range(size(newFilter)): pr.loc[valN[i],pr.columns[0]]=newFilter.loc[valN[i],newFilter.columns[0]]
+    for i in range(size(newFilter)): pr.loc[0,valN[i]]=newFilter.loc[0,valN[i]]
     #newFilter should be of the form pd.DataFrame({'var':[val],'var':[val],'var':[val]})
     
     keys=pr.columns.values.tolist()
@@ -55,6 +63,26 @@ def query(newFilter=pd.DataFrame(),valGrp=['eg_0','eta_0'],prfile='plot_par.csv'
     GroupedD=DataFilter.groupby(valGrp)[vl].mean().reset_index()
     return GroupedD
 
+    
+# def query(newFilter=pd.DataFrame(),valGrp=['eg_0','eta_0'],prfile='plot_par.csv',varfile='plot_var.csv'):
+ 
+#    #  Bigdata=pd.read_csv(''.join([folder,'data/','recengDB.csv']))
+#      Bigdata=pd.read_csv(''.join(['./data/','recengDB.csv']))
+#      pr=pd.read_csv(''.join(['./data/',prfile]))
+#      vl=genfromtxt(''.join(['./data/',varfile]),delimiter=',',dtype=str)
+     
+#      valN=newFilter.columns.values
+#      for i in range(size(newFilter)): pr[valN[i]][0]=newFilter[valN[i]][0]
+#      #newFilter should be of the form pd.DataFrame({'var':[val],'var':[val],'var':[val]})
+     
+#      keys=pr.columns.values.tolist()
+#      for i in range(size(valGrp)): keys.remove(valGrp[i])
+#      i1 = Bigdata.set_index(keys).index
+#      i2 = pr.set_index(keys).index
+#      DataFilter=Bigdata[i1.isin(i2)]
+#      GroupedD=DataFilter.groupby(valGrp)[vl].mean().reset_index()
+#      return GroupedD
+
 
 # In[46]:
 
@@ -63,14 +91,15 @@ def query(newFilter=pd.DataFrame(),valGrp=['eg_0','eta_0'],prfile='plot_par.csv'
 ###   PLOTS   ####
 ##################
 
+
 ### Consumer stocks and stochastic stability ###
 
 
 #subfolder='auto_eng'
 
 pd.options.mode.chained_assignment = None
-bigD=1
-bigJ=0
+#bigD=1
+#bigJ=0
 
 ### spatial parameters
 het=0
@@ -116,6 +145,7 @@ var_ind=(target+1)*(1+ecodim)-ecodim
 
 fltr=pd.DataFrame({'scenario_3':[0],'scenario_0':[0]})
 gd=query(fltr)
+#gd=query()
 yVal=[['minCtr','maxCtr'],['minAdj','maxAdj']]
 order=[ecodim,patchnbr,len(yVal),len(yVal[0]),gd['eg_0']] # order: (0) row, (1) column, (2) sets of variables, (3)  variables, (4) series
 
@@ -167,7 +197,7 @@ for k in range(order[2]): # ctr vs adj
 for j in range(3):
     for i in range(2):
         axs[0][j].set_ylim([0,2])
-        axs[1][j].set_ylim([0,310000000000])
+        axs[1][j].set_ylim([0,200])
         axs[i][j].xaxis.label.set_size(18)
         axs[i][j].yaxis.label.set_size(16)
         axs[i][j].xaxis.set_tick_params(labelsize=16)
@@ -187,7 +217,7 @@ fig.savefig(''.join([path_fig,'receng_C_stoch_stab.pdf']),bbox_inches='tight')
 
 
 #subfolder='auto_eng_stoch'
-os.chdir(subfolder)
+#os.chdir(subfolder)
 
 pd.options.mode.chained_assignment = None
 bigD=1
